@@ -1,6 +1,6 @@
 # Hulu Farm — Backend API
 
-Django 5 + PostgreSQL + JWT backend for **auth** and **community forum**.
+Django 5 + PostgreSQL + JWT backend for **auth and community forum**.
 
 ---
 
