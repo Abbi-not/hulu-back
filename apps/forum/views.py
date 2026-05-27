@@ -2,6 +2,7 @@ from rest_framework import generics, status, permissions, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from django_filters.rest_framework import DjangoFilterBackend
 
 from apps.core.permissions import IsOwnerOrReadOnly
@@ -29,8 +30,9 @@ class CategoryListView(generics.ListAPIView):
 class PostListCreateView(generics.ListCreateAPIView):
     """
     GET  /forum/posts/         — list published posts
-    POST /forum/posts/         — create post (auth required)
+    POST /forum/posts/         — create post (auth required); accepts JSON or multipart/form-data (for image upload)
     """
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ["category", "author__username", "status"]
     search_fields = ["title", "body", "author__username"]
@@ -64,9 +66,10 @@ class PostListCreateView(generics.ListCreateAPIView):
 class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     GET    /forum/posts/<slug>/
-    PATCH  /forum/posts/<slug>/
+    PATCH  /forum/posts/<slug>/   — accepts JSON or multipart/form-data (for image upload)
     DELETE /forum/posts/<slug>/
     """
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
     lookup_field = "slug"
     permission_classes = [IsOwnerOrReadOnly]
 

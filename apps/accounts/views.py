@@ -1,4 +1,5 @@
 from rest_framework import generics, status, permissions
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -59,8 +60,9 @@ class LogoutView(APIView):
 
 
 class MeView(generics.RetrieveUpdateAPIView):
-    """GET / PATCH /auth/me/"""
+    """GET / PATCH /auth/me/ — accepts JSON or multipart/form-data (for avatar upload)"""
     permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def get_serializer_class(self):
         if self.request.method in ("PATCH", "PUT"):
